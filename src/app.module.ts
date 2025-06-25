@@ -8,6 +8,8 @@ import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
 import Redis from 'ioredis';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { GlobalExceptionFilter } from './filters/global-exception.filer';
+import { RedisModule } from './redis/redis.module';
+import { CoursesModule } from './courses/courses.module';
 
 @Module({
   imports: [
@@ -44,12 +46,14 @@ import { GlobalExceptionFilter } from './filters/global-exception.filer';
       },
     }),
     AuthModule,
+    RedisModule,
+    CoursesModule,
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,

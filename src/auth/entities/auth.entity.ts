@@ -26,6 +26,9 @@ export class Auth extends BaseEntity {
   @Column({ enum: UserRole, type: 'enum', default: UserRole.USER })
   role: UserRole;
 
+  @Column({ default: true })
+  isActive: boolean = true;
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {

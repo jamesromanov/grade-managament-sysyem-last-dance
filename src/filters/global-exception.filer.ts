@@ -55,7 +55,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         break;
       default:
         status = (exception as any).status || HttpStatus.INTERNAL_SERVER_ERROR;
-        message = (exception as any).response.message || message;
+
+        message = (exception as any)?.response?.message || message;
     }
 
     return repsonse.status(status).json({

@@ -1,11 +1,18 @@
+import {
+  ApiOperation,
+  ApiProcessingResponse,
+  ApiProperty,
+} from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
 
 export class LoginAuthDto {
+  @ApiProperty({ type: 'string', default: 'exmaple@gmail.com' })
   @IsNotEmpty()
   @IsString()
   @IsEmail()
   email: string;
 
+  @ApiProperty({ type: 'string', default: 'StrongPassword1!' })
   @IsNotEmpty()
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
     message:
