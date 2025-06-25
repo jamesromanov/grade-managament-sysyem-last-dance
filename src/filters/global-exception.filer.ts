@@ -55,7 +55,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         break;
       default:
         status = (exception as any).status || HttpStatus.INTERNAL_SERVER_ERROR;
-
+        console.log(exception as any);
         message = (exception as any)?.response?.message || message;
     }
 

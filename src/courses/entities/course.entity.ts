@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { CourseCategory } from '../course-category';
 import { CourseLevel } from '../course-level';
 
@@ -29,4 +34,7 @@ export class Course {
 
   @Column({ default: true })
   active: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

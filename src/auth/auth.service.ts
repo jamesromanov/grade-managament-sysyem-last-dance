@@ -47,4 +47,10 @@ export class AuthService {
 
     return user;
   }
+
+  async findOne(id: number) {
+    const user = await this.authRepo.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('No users found');
+    return user;
+  }
 }

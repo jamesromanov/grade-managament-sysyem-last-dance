@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,12 +12,15 @@ import { Course } from './entities/course.entity';
 import { Repository } from 'typeorm';
 import { QueryDto } from 'src/query-dto';
 import { RedisService } from 'src/redis/redis.service';
+import { ModulesService } from 'src/modules/modules.service';
 
 @Injectable()
 export class CoursesService {
   constructor(
     @InjectRepository(Course) private courseRepo: Repository<Course>,
     private redis: RedisService,
+    @Inject(forwardRef(() => ModulesService))
+    private readonly modules: ModulesService,
   ) {}
   async create(createCourseDto: CreateCourseDto) {
     const course = this.courseRepo.create(createCourseDto);
@@ -107,5 +112,10 @@ export class CoursesService {
     await this.redis.del(`user:id:${id}`);
 
     return `Successfully deleted`;
+  }
+
+  async getModulesInfo(courseId: number) {
+    const modules = await this.modules.getInfo(courseId);
+    return modules;
   }
 }

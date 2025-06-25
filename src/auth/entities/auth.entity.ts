@@ -3,6 +3,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
   Column,
+  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -28,6 +29,9 @@ export class Auth extends BaseEntity {
 
   @Column({ default: true })
   isActive: boolean = true;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @BeforeInsert()
   @BeforeUpdate()

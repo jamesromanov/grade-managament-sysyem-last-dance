@@ -10,6 +10,10 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { GlobalExceptionFilter } from './filters/global-exception.filer';
 import { RedisModule } from './redis/redis.module';
 import { CoursesModule } from './courses/courses.module';
+import { ModulesModule } from './modules/modules.module';
+import { LessonsModule } from './lessons/lessons.module';
+import { ResultsModule } from './results/results.module';
+import { EnrollmentsModule } from './enrollments/enrollments.module';
 
 @Module({
   imports: [
@@ -48,6 +52,10 @@ import { CoursesModule } from './courses/courses.module';
     AuthModule,
     RedisModule,
     CoursesModule,
+    ModulesModule,
+    LessonsModule,
+    ResultsModule,
+    EnrollmentsModule,
   ],
   providers: [
     // {

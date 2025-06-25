@@ -44,4 +44,9 @@ export class CoursesController {
   remove(@Param('id') id: string) {
     return this.coursesService.remove(+id);
   }
+
+  @Get(':courseId/modules')
+  getInfoModules(@Param('courseId') courseId: number) {
+    return this.coursesService.getModulesInfo(courseId);
+  }
 }
