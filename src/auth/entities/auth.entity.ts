@@ -33,6 +33,8 @@ export class Auth extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column()
+  refreshToken: string;
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
@@ -46,7 +48,7 @@ export class Auth extends BaseEntity {
     return await bcrypt.compare(password, this.password);
   }
   toJson() {
-    const { password, ...rest } = this;
+    const { password, refreshToken, ...rest } = this;
     return rest;
   }
 }

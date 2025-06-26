@@ -27,12 +27,12 @@ export class AuthService {
 
     const payload = { id: user.id, role: user.role };
 
-    const token = await this.jwt.signAsync(payload, {
-      secret: process.env.ACCESS_TOKEN_KEY,
-      expiresIn: process.env.ACCESS_TOKEN_EXP,
+    const refreshToken = await this.jwt.signAsync(payload, {
+      secret: process.env.REFRESH_TOKEN_KEY,
+      expiresIn: process.env.REFRESH_TOKEN_EXP,
     });
 
-    return { token };
+    return;
   }
 
   async validateUser(email: string, pass: string) {

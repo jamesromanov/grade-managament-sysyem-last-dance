@@ -1,8 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -17,5 +18,11 @@ export class AuthController {
   @Post('login')
   login(@Body() LoginAuthDto: LoginAuthDto) {
     return this.authService.login(LoginAuthDto);
+  }
+
+  @ApiOperation({ summary: 'user refresh' })
+  @Post('refresh')
+  refresh(@Req() req: Request) {
+    return this.authService;
   }
 }
