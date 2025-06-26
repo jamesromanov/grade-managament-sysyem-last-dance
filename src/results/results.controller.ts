@@ -1,34 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ResultsService } from './results.service';
-import { CreateResultDto } from './dto/create-result.dto';
-import { UpdateResultDto } from './dto/update-result.dto';
+
+import { Request } from 'express';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtGuard } from 'src/guards/auth.guard';
 
 @Controller('results')
 export class ResultsController {
   constructor(private readonly resultsService: ResultsService) {}
 
-  @Post()
-  create(@Body() createResultDto: CreateResultDto) {
-    return this.resultsService.create(createResultDto);
-  }
-
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   @Get()
-  findAll() {
-    return this.resultsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.resultsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateResultDto: UpdateResultDto) {
-    return this.resultsService.update(+id, updateResultDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.resultsService.remove(+id);
+  getresults(@Req() req: Request) {
+    return this.resultsService.result(req);
   }
 }

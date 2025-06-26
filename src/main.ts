@@ -8,6 +8,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('Course management system Api!')
+    .addBearerAuth()
     .setDescription('This is simple course management system api')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);

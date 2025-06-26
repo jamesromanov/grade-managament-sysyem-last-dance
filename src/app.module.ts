@@ -14,6 +14,7 @@ import { ModulesModule } from './modules/modules.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { ResultsModule } from './results/results.module';
 import { EnrollmentsModule } from './enrollments/enrollments.module';
+import { AssigmentModule } from './assigment/assigment.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { EnrollmentsModule } from './enrollments/enrollments.module';
     LessonsModule,
     ResultsModule,
     EnrollmentsModule,
+    AssigmentModule,
   ],
   providers: [
     // {

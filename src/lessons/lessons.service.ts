@@ -52,4 +52,12 @@ export class LessonsService {
     await this.redis.set(`lesson:module:${moduleId}`, lessons, 60);
     return lessons;
   }
+
+  async findOne(id: number) {
+    const lessonCache = await this.redis.get(`lesson:id:${id}`);
+    if (lessonCache) return JSON.parse(lessonCache);
+    const lesson = await this.lessonRepo.findOne({ where: { id } });
+    if (!lesson) throw new NotFoundException('No lessons found');
+    return lesson;
+  }
 }

@@ -1,10 +1,16 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateEnrollmentDto } from './dto/create-enrollment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Enrollment } from './entities/enrollment.entity';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { CoursesService } from 'src/courses/courses.service';
+import { Request } from 'express';
 
 @Injectable()
 export class EnrollmentsService {
@@ -22,5 +28,15 @@ export class EnrollmentsService {
       courseId: course.id,
     });
     return await this.enrolRepo.save(enrollment);
+  }
+
+  async getEnrolls(req: Request) {
+    const enrollment = await this.enrolRepo.find({
+      where: { userId: Equal(req?.user?.id) },
+    });
+
+    if (enrollment.length === 0)
+      throw new NotFoundException('No enrollments found');
+    return enrollment;
   }
 }

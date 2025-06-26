@@ -67,7 +67,7 @@ export class CoursesService {
 
     return {
       totalPages,
-      currentPage: page,
+      currentPage: +page,
       hasNextPage: page < totalPages,
       totalCourses: totalCoursesCount,
       courses,
