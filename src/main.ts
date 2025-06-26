@@ -7,9 +7,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
-    .setTitle('Course management system Api V1!')
+    .setTitle('Course management system Api!')
     .addBearerAuth()
-    .setDescription('This is simple course management system api exam')
+    .setDescription('This is simple course management system api')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, documentFactory);
