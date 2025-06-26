@@ -12,13 +12,14 @@ import {
 import { ResultsService } from './results.service';
 
 import { Request } from 'express';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { JwtGuard } from 'src/guards/auth.guard';
 
 @Controller('results')
 export class ResultsController {
   constructor(private readonly resultsService: ResultsService) {}
 
+  @ApiOperation({ summary: 'see results' })
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @Get()
