@@ -9,7 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Course management system Api V1!')
     .addBearerAuth()
-    .setDescription('This is simple course management system api')
+    .setDescription('This is simple course management system api exam')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, documentFactory);
