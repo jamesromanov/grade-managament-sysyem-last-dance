@@ -33,7 +33,7 @@ export class Auth extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   refreshToken: string;
   @BeforeInsert()
   @BeforeUpdate()
