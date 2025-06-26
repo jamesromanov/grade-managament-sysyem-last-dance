@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Dependenciyalarni o'rnatish
+      - name: Dependenciyalarni ornatish
         run: npm ci
 
       - name: Testlarni ishga tushirish
