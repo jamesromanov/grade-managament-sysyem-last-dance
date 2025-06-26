@@ -2,7 +2,7 @@ name: NestJS CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build-test:
@@ -47,4 +47,4 @@ jobs:
             npm install --production 
             npm install --save-dev @types/node
             npm run build
-            pm2 restart main
+            pm2 restart server
