@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
-    .setTitle('Course management system Api!')
+    .setTitle('Course management system Api V1!')
     .addBearerAuth()
     .setDescription('This is simple course management system api')
     .build();
