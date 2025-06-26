@@ -1,6 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateStudentCourseDto } from './dto/create-student_course.dto';
-import { UpdateStudentCourseDto } from './dto/update-student_course.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { LessonsService } from 'src/lessons/lessons.service';
 import { ModulesService } from 'src/modules/modules.service';
@@ -35,19 +34,11 @@ export class StudentCoursesService {
     return await this.studentCourses.save(student_courses);
   }
 
-  findAll() {
-    return;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} studentCourse`;
-  }
-
-  update(id: number, updateStudentCourseDto: UpdateStudentCourseDto) {
-    return `This action updates a #${id} studentCourse`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} studentCourse`;
+  async findAll(studentId: number) {
+    const user = await this.user.findOne(studentId);
+    return await this.studentCourses.find({
+      where: { studentId: user.id },
+      relations: ['studentId', 'courseId', 'lessonId'],
+    });
   }
 }
