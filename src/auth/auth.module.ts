@@ -7,12 +7,15 @@ import { Enrollment } from 'src/enrollments/entities/enrollment.entity';
 import { AssigmentModule } from 'src/assigment/assigment.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/strategy/jwt.strategy';
+import { StudentCoursesModule } from 'src/student_courses/student_courses.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Auth]),
     forwardRef(() => Enrollment),
     forwardRef(() => AssigmentModule),
+    forwardRef(() => StudentCoursesModule),
+
     PassportModule,
   ],
   controllers: [AuthController],

@@ -15,6 +15,7 @@ import { LessonsModule } from './lessons/lessons.module';
 import { ResultsModule } from './results/results.module';
 import { EnrollmentsModule } from './enrollments/enrollments.module';
 import { AssigmentModule } from './assigment/assigment.module';
+import { StudentCoursesModule } from './student_courses/student_courses.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { AssigmentModule } from './assigment/assigment.module';
     ResultsModule,
     EnrollmentsModule,
     AssigmentModule,
+    StudentCoursesModule,
   ],
   providers: [
     // {
