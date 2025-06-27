@@ -33,6 +33,7 @@ services:
       ACCESS_TOKEN_EXP: 1d
       REFRESH_TOKEN_KEY: usm12123n21!@3423
       REFRESH_TOKEN_EXP: 7d
+      TOKEN_EXP: 1d
       TOKEN_KEY: asu923b81212381bwb
       COOKIE_EXP: 7*24*3600000
       REDIS_HOST: redis

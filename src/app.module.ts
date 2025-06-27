@@ -62,10 +62,10 @@ import { StudentCoursesModule } from './student_courses/student_courses.module';
     StudentCoursesModule,
   ],
   providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: ThrottlerGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
