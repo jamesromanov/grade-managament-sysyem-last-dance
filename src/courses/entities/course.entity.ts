@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CourseCategory } from '../course-category';
 import { CourseLevel } from '../course-level';
+import { Auth } from 'src/auth/entities/auth.entity';
 
 @Entity({ name: 'courses' })
 export class Course {
@@ -20,11 +22,8 @@ export class Course {
   @Column({ nullable: false })
   price: number;
 
-  @Column({
-    default: 1,
-    nullable: false,
-  })
-  teacher: number;
+  @ManyToOne(() => Auth)
+  teacher: Auth;
 
   @Column({ enum: CourseCategory })
   category: CourseCategory;

@@ -29,6 +29,7 @@ export class AuthService {
 
     const payload = { id: user.id, role: user.role };
 
+    console.log('docker is working');
     const refreshToken = await this.jwt.signAsync(payload, {
       secret: process.env.REFRESH_TOKEN_KEY,
       expiresIn: process.env.REFRESH_TOKEN_EXP,

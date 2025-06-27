@@ -8,6 +8,7 @@ import { AssigmentModule } from 'src/assigment/assigment.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/strategy/jwt.strategy';
 import { StudentCoursesModule } from 'src/student_courses/student_courses.module';
+import { CoursesModule } from 'src/courses/courses.module';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { StudentCoursesModule } from 'src/student_courses/student_courses.module
     forwardRef(() => Enrollment),
     forwardRef(() => AssigmentModule),
     forwardRef(() => StudentCoursesModule),
-
+    forwardRef(() => CoursesModule),
     PassportModule,
   ],
   controllers: [AuthController],

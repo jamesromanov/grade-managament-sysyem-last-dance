@@ -58,6 +58,7 @@ export class LessonsService {
     if (lessonCache) return JSON.parse(lessonCache);
     const lesson = await this.lessonRepo.findOne({ where: { id } });
     if (!lesson) throw new NotFoundException('No lessons found');
+    await this.redis.set(`lesson:id:${id}`, lesson, 60);
     return lesson;
   }
 }

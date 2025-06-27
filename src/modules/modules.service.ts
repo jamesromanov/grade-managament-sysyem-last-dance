@@ -18,6 +18,7 @@ import { CreateAssigment } from './create-assigment';
 import { AssigmentService } from 'src/assigment/assigment.service';
 import { GrateDto } from './dto/grade-assignment.dto';
 import { Request } from 'express';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class ModulesService {
@@ -28,6 +29,7 @@ export class ModulesService {
     @Inject(forwardRef(() => LessonsService)) private lesson: LessonsService,
     @Inject(forwardRef(() => AssigmentService))
     private assign: AssigmentService,
+    private redis: RedisService,
   ) {}
   async create(createModuleDto: CreateModuleDto) {
     const course = await this.courses.findOne(
@@ -41,6 +43,9 @@ export class ModulesService {
   }
 
   async getInfo(id: number) {
+    const modulesCache = await this.redis.get(`modules:all:courseId:${id}`);
+
+    if (modulesCache) return JSON.parse(modulesCache);
     const course = await this.courses.findOne(id);
     const modules = await this.moduleRepo.find({
       where: {
@@ -48,17 +53,24 @@ export class ModulesService {
       },
     });
     if (modules.length === 0) throw new NotFoundException('No modules found');
+    await this.redis.set(`modules:all:courseId:${id}`, modules, 60);
     return modules;
   }
 
   async findOne(id: number) {
+    const moduleCache = await this.redis.get(`module:id:${id}`);
+    if (moduleCache) return JSON.parse(moduleCache);
     const module = await this.moduleRepo.findOne({ where: { id } });
     if (!module) throw new NotFoundException('No modules found');
+    await this.redis.set(`module:id:${id}`, module, 60);
     return module;
   }
 
   async getLessons(moduleId: number) {
+    const lessonCache = await this.redis.get(`lessons:id:${moduleId}`);
+    if (lessonCache) return JSON.parse(lessonCache);
     const lessons = await this.lesson.getLessons(moduleId);
+    await this.redis.set(`lessons:id:${moduleId}`, lessons, 60);
     return lessons;
   }
 

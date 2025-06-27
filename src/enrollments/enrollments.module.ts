@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Enrollment } from './entities/enrollment.entity';
 import { CoursesModule } from 'src/courses/courses.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { RedisService } from 'src/redis/redis.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { AuthModule } from 'src/auth/auth.module';
     forwardRef(() => AuthModule),
   ],
   controllers: [EnrollmentsController],
-  providers: [EnrollmentsService],
+  providers: [EnrollmentsService, RedisService],
 })
 export class EnrollmentsModule {}

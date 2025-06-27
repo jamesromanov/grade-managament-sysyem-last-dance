@@ -13,6 +13,9 @@ import { Repository } from 'typeorm';
 import { QueryDto } from 'src/query-dto';
 import { RedisService } from 'src/redis/redis.service';
 import { ModulesService } from 'src/modules/modules.service';
+import { AuthService } from 'src/auth/auth.service';
+import { UserRole } from 'src/auth/user-role';
+import { Auth } from 'src/auth/entities/auth.entity';
 
 @Injectable()
 export class CoursesService {
@@ -21,9 +24,27 @@ export class CoursesService {
     private redis: RedisService,
     @Inject(forwardRef(() => ModulesService))
     private readonly modules: ModulesService,
+    @Inject(forwardRef(() => AuthService))
+    private readonly user: AuthService,
   ) {}
   async create(createCourseDto: CreateCourseDto) {
-    const course = this.courseRepo.create(createCourseDto);
+    let user: Auth;
+    const userCache = await this.redis.get(
+      `user:id:${createCourseDto.teacher}`,
+    );
+    const userExist = await this.user.findOne(createCourseDto.teacher);
+    if (userCache) user = JSON.parse(userCache);
+    else user = userExist;
+
+    if (user.role !== UserRole.TEACHER)
+      throw new BadRequestException('User is not a teacher');
+
+    await this.redis.set(`user:id:${createCourseDto.teacher}`, user, 60);
+    const course = this.courseRepo.create({
+      ...createCourseDto,
+      teacher: user.id as any,
+    });
+
     return await this.courseRepo.save(course);
   }
 
@@ -75,7 +96,7 @@ export class CoursesService {
   }
 
   async findOne(id: number) {
-    const courseCache = await this.redis.get(`user:id:${id}`);
+    const courseCache = await this.redis.get(`course:id:${id}`);
 
     if (courseCache) return JSON.parse(courseCache);
     const course = await this.courseRepo.findOne({
@@ -83,7 +104,7 @@ export class CoursesService {
     });
     if (!course) throw new NotFoundException('No courses found');
 
-    await this.redis.set(`user:id:${id}`, course, 60);
+    await this.redis.set(`course:id:${id}`, course, 60);
 
     return course;
   }
@@ -99,7 +120,7 @@ export class CoursesService {
     course.level = updateCourseDto.level ?? course.level;
 
     await this.courseRepo.save(course);
-    await this.redis.del(`user:id:${id}`);
+    await this.redis.del(`course:id:${id}`);
 
     return course;
   }
@@ -109,13 +130,16 @@ export class CoursesService {
 
     course.active = false;
     await this.courseRepo.save(course);
-    await this.redis.del(`user:id:${id}`);
+    await this.redis.del(`course:id:${id}`);
 
     return `Successfully deleted`;
   }
 
   async getModulesInfo(courseId: number) {
+    const modulesCache = await this.redis.get(`modules:all:${courseId}`);
+    if (modulesCache) return JSON.parse(modulesCache);
     const modules = await this.modules.getInfo(courseId);
+    await this.redis.set(`modules:all:${courseId}`, modules, 60);
     return modules;
   }
 }

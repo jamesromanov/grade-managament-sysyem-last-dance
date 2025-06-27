@@ -10,12 +10,14 @@ import { Lesson } from 'src/lessons/entities/lesson.entity';
 import { Enrollment } from 'src/enrollments/entities/enrollment.entity';
 import { StudentCourse } from 'src/student_courses/entities/student_course.entity';
 import { StudentCoursesModule } from 'src/student_courses/student_courses.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Course]),
     forwardRef(() => ModulesModule),
     forwardRef(() => StudentCoursesModule),
+    forwardRef(() => AuthModule),
 
     forwardRef(() => Lesson),
     forwardRef(() => Enrollment),

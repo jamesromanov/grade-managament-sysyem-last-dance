@@ -11,6 +11,7 @@ import { Equal, Repository } from 'typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { Request } from 'express';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class EnrollmentsService {
@@ -18,6 +19,7 @@ export class EnrollmentsService {
     @InjectRepository(Enrollment) private enrolRepo: Repository<Enrollment>,
     @Inject(forwardRef(() => AuthService)) private auth: AuthService,
     @Inject(forwardRef(() => CoursesService)) private course: CoursesService,
+    private redis: RedisService,
   ) {}
   async create(createEnrollmentDto: CreateEnrollmentDto) {
     const course = await this.course.findOne(createEnrollmentDto.courseId);
@@ -31,12 +33,16 @@ export class EnrollmentsService {
   }
 
   async getEnrolls(req: Request) {
-    const enrollment = await this.enrolRepo.find({
-      where: { userId: Equal(req?.user?.id) },
+    const userID = req?.user?.id;
+    const enrollsCache = await this.redis.get(`enrs:all:${userID}`);
+    if (enrollsCache) return JSON.parse(enrollsCache);
+    const enrollments = await this.enrolRepo.find({
+      where: { userId: Equal(userID) },
     });
 
-    if (enrollment.length === 0)
+    await this.redis.set(`enrs:all:${userID}`, enrollments, 60);
+    if (enrollments.length === 0)
       throw new NotFoundException('No enrollments found');
-    return enrollment;
+    return enrollments;
   }
 }

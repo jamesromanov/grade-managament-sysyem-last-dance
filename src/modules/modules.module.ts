@@ -6,6 +6,7 @@ import { Modul } from './entities/module.entity';
 import { CoursesModule } from 'src/courses/courses.module';
 import { LessonsModule } from 'src/lessons/lessons.module';
 import { AssigmentModule } from 'src/assigment/assigment.module';
+import { RedisService } from 'src/redis/redis.service';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { AssigmentModule } from 'src/assigment/assigment.module';
     forwardRef(() => AssigmentModule),
   ],
   controllers: [ModulesController],
-  providers: [ModulesService],
+  providers: [ModulesService, RedisService],
   exports: [ModulesService],
 })
 export class ModulesModule {}

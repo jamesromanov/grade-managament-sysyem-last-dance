@@ -7,6 +7,7 @@ import { CoursesService } from 'src/courses/courses.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudentCourse } from './entities/student_course.entity';
 import { Repository } from 'typeorm';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class StudentCoursesService {
@@ -17,6 +18,7 @@ export class StudentCoursesService {
     @Inject(forwardRef(() => LessonsService)) private lesson: LessonsService,
     @Inject(forwardRef(() => ModulesService)) private modul: ModulesService,
     @Inject(forwardRef(() => CoursesService)) private course: CoursesService,
+    private redis: RedisService,
   ) {}
   async create(createStudentCourseDto: CreateStudentCourseDto) {
     const user = await this.user.findOne(createStudentCourseDto.studentId);
@@ -35,10 +37,20 @@ export class StudentCoursesService {
   }
 
   async findAll(studentId: number) {
+    const userCache = await this.redis.get(
+      `user:student_courses:id:${studentId}`,
+    );
+    if (userCache) return JSON.parse(userCache);
     const user = await this.user.findOne(studentId);
-    return await this.studentCourses.find({
+    const student_courses = await this.studentCourses.find({
       where: { studentId: user.id },
       relations: ['studentId', 'courseId', 'lessonId'],
     });
+    await this.redis.set(
+      `user:student_courses:id:${studentId}`,
+      student_courses,
+      60,
+    );
+    return student_courses;
   }
 }

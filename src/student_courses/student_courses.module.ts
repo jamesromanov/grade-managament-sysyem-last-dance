@@ -7,6 +7,7 @@ import { ModulesModule } from 'src/modules/modules.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StudentCourse } from './entities/student_course.entity';
+import { RedisService } from 'src/redis/redis.service';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { StudentCourse } from './entities/student_course.entity';
     forwardRef(() => AuthModule),
   ],
   controllers: [StudentCoursesController],
-  providers: [StudentCoursesService],
+  providers: [StudentCoursesService, RedisService],
 })
 export class StudentCoursesModule {}
