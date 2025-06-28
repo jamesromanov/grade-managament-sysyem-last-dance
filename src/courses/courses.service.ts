@@ -115,7 +115,11 @@ export class CoursesService {
     course.name = updateCourseDto.name ?? course.name;
     course.description = updateCourseDto.description ?? course.description;
     course.price = updateCourseDto.price ?? course.price;
-    course.teacher = updateCourseDto.teacher ?? course.teacher;
+
+    if (updateCourseDto.teacher) {
+      const teacher = await this.user.findOne(updateCourseDto.teacher);
+      course.teacher = teacher ?? course.teacher;
+    }
     course.category = updateCourseDto.category ?? course.category;
     course.level = updateCourseDto.level ?? course.level;
 
